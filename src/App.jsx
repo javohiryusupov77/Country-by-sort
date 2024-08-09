@@ -1,13 +1,16 @@
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Carusel from "./components/Carusel";
 import RightDrawer from "./components/Drawer";
 import Header from "./components/header";
+import HomePage from "./components/Homepage";
+import AboutPage from "./components/About";
 
 function App() {
   return (
     <Router>
       <div>
         <Header />
+        <br />
         <div>
           <Carusel />
         </div>
@@ -16,7 +19,7 @@ function App() {
         </div>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/about/:cca3" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </div>
@@ -24,13 +27,7 @@ function App() {
   );
 }
 
-function HomePage() {
-  return <h2>Home Page</h2>;
-}
-
-function AboutPage() {
-  return <h2>About Page</h2>;
-}
+ 
 
 function ContactPage() {
   return <h2>Contact Page</h2>;

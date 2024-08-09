@@ -1,53 +1,30 @@
 import React from "react";
 import { Carousel } from "flowbite-react";
+import { useFlagsContext } from "./FlagsContext";
 
 const Carusel = () => {
+  const flags = useFlagsContext();
+
   return (
-    <div className="relative h-56 sm:h-64 xl:h-80 2xl:h-96 border border-black overflow-hidden">
-      <Carousel slide={false}>
-        <div className="flex items-center justify-center h-full w-full">
-          <img
-            className="object-cover w-full h-full"
-            src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-            alt="Carousel 1"
-          />
-          <img
-            className="object-cover w-full h-full"
-            src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-            alt="Carousel 1"
-          />
-          <img
-            className="object-cover w-full h-full"
-            src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-            alt="Carousel 1"
-          />
-          <img
-            className="object-cover w-full h-full"
-            src="https://flowbite.com/docs/images/carousel/carousel-1.svg"
-            alt="Carousel 1"
-          />
-        </div>
-        <div className="flex items-center justify-center h-full w-full">
-          <img
-            className="object-cover w-full h-full"
-            src="https://flowbite.com/docs/images/carousel/carousel-2.svg"
-            alt="Carousel 2"
-          />
-        </div>
-        <div className="flex items-center justify-center h-full w-full">
-          <img
-            className="object-cover w-full h-full"
-            src="https://flowbite.com/docs/images/carousel/carousel-3.svg"
-            alt="Carousel 3"
-          />
-        </div>
-        <div className="flex items-center justify-center h-full w-full">
-          <img
-            className="object-cover w-full h-full"
-            src="https://flowbite.com/docs/images/carousel/carousel-4.svg"
-            alt="Carousel 4"
-          />
-        </div>
+    <div className=" bg-slate-400 relative h-56 sm:h-64 xl:h-80 2xl:h-96 border border-black overflow-hidden rounded-lg shadow-lg">
+      <Carousel
+        slide={false}
+        indicators={false}
+        controls={true}
+        className="carousel-container"
+      >
+        {flags.map((flag, index) => (
+          <div
+            key={index}
+            className="flex justify-center items-center w-full h-full"
+          >
+            <img
+              className="object-cover rounded-lg"
+              src={flag}
+              alt={`Flag ${index}`}
+            />
+          </div>
+        ))}
       </Carousel>
     </div>
   );
