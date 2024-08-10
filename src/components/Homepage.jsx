@@ -8,6 +8,8 @@ function HomePage() {
   const [countries, setCountries] = useState([]);
   const { selectedCountries, toggleCountry } = useCountryContext();
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -28,6 +30,16 @@ function HomePage() {
       ? true
       : country.name.common.toLowerCase().includes(search.toLowerCase())
   );
+
+  // Pagination logic
+  const indexOfLastCountry = currentPage * itemsPerPage;
+  const indexOfFirstCountry = indexOfLastCountry - itemsPerPage;
+  const currentCountries = filteredCountries.slice(
+    indexOfFirstCountry,
+    indexOfLastCountry
+  );
+
+  const totalPages = Math.ceil(filteredCountries.length / itemsPerPage);
 
   return (
     <div className="p-4">
@@ -51,7 +63,7 @@ function HomePage() {
             <Table.HeadCell>Information</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {filteredCountries.map((country) => (
+            {currentCountries.map((country) => (
               <Table.Row
                 key={country.cca3}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -91,6 +103,28 @@ function HomePage() {
             ))}
           </Table.Body>
         </Table>
+      </div>
+      {/* Pagination Controls */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          Previous
+        </button>
+        <span>
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+          }
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
