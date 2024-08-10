@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import  Chart  from "./chart";
 
 function AboutPage() {
   const { cca3 } = useParams();
@@ -37,8 +38,8 @@ function AboutPage() {
   if (!country) return <div className="text-center text-red py-10">No data found</div>;
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="bg-white shadow-md rounded-lg p-6 flex items-center space-x-6">
+    <div className="container grid grid-cols-1 sm:grid-cols-2 mx-auto p-6">
+      <div className="col-span-1 bg-white shadow-md rounded-lg p-6 flex items-center space-x-6">
         <img
           src={country.flags.svg}
           alt={`${country.name.common} flag`}
@@ -57,6 +58,9 @@ function AboutPage() {
             Area: {country.area?.toLocaleString()} km²
           </p>
         </div>
+      </div>
+      <div className="col-span-1">
+        <Chart/>
       </div>
     </div>
   );

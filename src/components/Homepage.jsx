@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pagination, Table } from "flowbite-react";
+import { Table } from "flowbite-react";
 import { EyeIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useCountryContext } from "./ContextProvide";
@@ -36,11 +36,11 @@ function HomePage() {
           onChange={(e) => setSearch(e.target.value)}
           type="text"
           placeholder="Search for a country..."
-          className="w-full md:w-1/3 lg:w-1/4 px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
       </div>
       <div className="overflow-x-auto">
-        <Table>
+        <Table className="min-w-full">
           <Table.Head>
             <Table.HeadCell>Flag</Table.HeadCell>
             <Table.HeadCell>Country Name</Table.HeadCell>
