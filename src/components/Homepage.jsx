@@ -104,7 +104,6 @@ function HomePage() {
           </Table.Body>
         </Table>
       </div>
-      {/* Pagination Controls */}
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}

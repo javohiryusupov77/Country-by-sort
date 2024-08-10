@@ -25,7 +25,7 @@ export const CountryProvider = ({ children }) => {
   };
 
   return (
-    <CountryContext.Provider value={{ selectedCountries, toggleCountry }}>
+    <CountryContext.Provider value={{ selectedCountries, setSelectedCountries, toggleCountry }}>
       {children}
     </CountryContext.Provider>
   );

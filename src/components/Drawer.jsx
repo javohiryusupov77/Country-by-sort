@@ -4,9 +4,12 @@ import { useCountryContext } from "./ContextProvide";
 
 function RightDrawer() {
   const [isOpen, setIsOpen] = useState(true);
-  const { selectedCountries } = useCountryContext();
-
+  const { selectedCountries, setSelectedCountries } = useCountryContext();
   const handleClose = () => setIsOpen(false);
+  function deleteItem() {
+    setSelectedCountries("");
+    localStorage.removeItem("selectedCountries");
+  }
 
   return (
     <>
@@ -17,7 +20,7 @@ function RightDrawer() {
         <Drawer.Header title="Selected Countries" />
         <Drawer.Items>
           <div className="space-y-4">
-            {selectedCountries.map((country) => (
+            {selectedCountries ===  "" ? "" : selectedCountries.map((country) => (
               <div key={country.cca3} className="flex items-center">
                 <img
                   src={country.flags.png}
@@ -27,6 +30,11 @@ function RightDrawer() {
                 <span>{country.name.common}</span>
               </div>
             ))}
+          </div>
+          <div className="flex justify-center mt-4">
+            <button onClick={deleteItem} className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+              Clear All
+            </button>
           </div>
         </Drawer.Items>
       </Drawer>
