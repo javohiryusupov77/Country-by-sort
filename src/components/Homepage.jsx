@@ -7,6 +7,7 @@ import { useCountryContext } from "./ContextProvide";
 function HomePage() {
   const [countries, setCountries] = useState([]);
   const { selectedCountries, toggleCountry } = useCountryContext();
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -22,9 +23,23 @@ function HomePage() {
     fetchCountries();
   }, []);
 
+  const filteredCountries = countries.filter((country) =>
+    search.toLowerCase() === ""
+      ? true
+      : country.name.common.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
-    <div>
-      <div className="overflow-x-auto mt-4">
+    <div className="p-4">
+      <div className="mb-4 flex justify-end">
+        <input
+          onChange={(e) => setSearch(e.target.value)}
+          type="text"
+          placeholder="Search for a country..."
+          className="w-full md:w-1/3 lg:w-1/4 px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        />
+      </div>
+      <div className="overflow-x-auto">
         <Table>
           <Table.Head>
             <Table.HeadCell>Flag</Table.HeadCell>
@@ -36,7 +51,7 @@ function HomePage() {
             <Table.HeadCell>Information</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {countries.map((country) => (
+            {filteredCountries.map((country) => (
               <Table.Row
                 key={country.cca3}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
