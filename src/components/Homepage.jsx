@@ -10,7 +10,7 @@ function HomePage() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [visiblePages, setVisiblePages] = useState(5); // Number of visible pages
+  const [visiblePages, setVisiblePages] = useState(5);
 
   useEffect(() => {
     const fetchCoins = async () => {
@@ -40,7 +40,6 @@ function HomePage() {
 
   const totalPages = Math.ceil(filteredCoins.length / itemsPerPage);
 
-  // Determine the range of pages to display
   const startPage = Math.max(1, currentPage - Math.floor(visiblePages / 2));
   const endPage = Math.min(totalPages, startPage + visiblePages - 1);
 
