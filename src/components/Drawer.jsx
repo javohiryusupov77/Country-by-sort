@@ -17,8 +17,13 @@ function RightDrawer() {
       <div className="flex items-center justify-end p-4">
         <Button onClick={() => setIsOpen(true)}>Watch List</Button>
       </div>
-      <Drawer open={isOpen} onClose={handleClose} position="right">
-        <Drawer.Header title="Selected Coins" />
+      <Drawer
+        className="bg-gray-400"
+        open={isOpen}
+        onClose={handleClose}
+        position="right"
+      >
+        <Drawer.Header title="Selected Coins" className="bg-gray-400 text-white" />
         <Drawer.Items>
           <div className="p-4">
             {selectedCoins.length === 0 ? (
@@ -28,14 +33,14 @@ function RightDrawer() {
                 {selectedCoins.map((coin) => (
                   <div
                     key={coin.id}
-                    className="flex items-center space-x-2 p-2 border border-gray-200 rounded-lg shadow-sm"
+                    className="flex items-center space-x-2 p-2 bg-black text-white border border-gray-200 rounded-lg shadow-sm" 
                   >
                     <img
                       src={coin.image}
                       alt={`Logo of ${coin.name}`}
                       className="h-8 w-8"
                     />
-                    <span className="text-black font-medium">{coin.name}</span>
+                    <span>{coin.name}</span>
                   </div>
                 ))}
               </div>
