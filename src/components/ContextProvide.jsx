@@ -1,34 +1,36 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-const CountryContext = createContext();
+const CoinContext = createContext();
 
-export const CountryProvider = ({ children }) => {
-  const [selectedCountries, setSelectedCountries] = useState([]);
+export const CoinProvider = ({ children }) => {
+  const [selectedCoins, setSelectedCoins] = useState([]);
 
   useEffect(() => {
-    const savedCountries = JSON.parse(localStorage.getItem('selectedCountries')) || [];
-    setSelectedCountries(savedCountries);
+    const savedCoins = JSON.parse(localStorage.getItem("selectedCoins")) || [];
+    setSelectedCoins(savedCoins);
   }, []);
 
-  const toggleCountry = (country) => {
-    const isSelected = selectedCountries.some(c => c.cca3 === country.cca3);
+  const toggleCoin = (coin) => {
+    const isSelected = selectedCoins.some((c) => c.id === coin.id);
 
     if (isSelected) {
-      const updatedCountries = selectedCountries.filter(c => c.cca3 !== country.cca3);
-      setSelectedCountries(updatedCountries);
-      localStorage.setItem('selectedCountries', JSON.stringify(updatedCountries));
+      const updatedCoins = selectedCoins.filter((c) => c.id !== coin.id);
+      setSelectedCoins(updatedCoins);
+      localStorage.setItem("selectedCoins", JSON.stringify(updatedCoins));
     } else {
-      const updatedCountries = [...selectedCountries, country];
-      setSelectedCountries(updatedCountries);
-      localStorage.setItem('selectedCountries', JSON.stringify(updatedCountries));
+      const updatedCoins = [...selectedCoins, coin];
+      setSelectedCoins(updatedCoins);
+      localStorage.setItem("selectedCoins", JSON.stringify(updatedCoins));
     }
   };
 
   return (
-    <CountryContext.Provider value={{ selectedCountries, setSelectedCountries, toggleCountry }}>
+    <CoinContext.Provider
+      value={{ selectedCoins, setSelectedCoins, toggleCoin }}
+    >
       {children}
-    </CountryContext.Provider>
+    </CoinContext.Provider>
   );
 };
 
-export const useCountryContext = () => useContext(CountryContext);
+export const useCoinContext = () => useContext(CoinContext);

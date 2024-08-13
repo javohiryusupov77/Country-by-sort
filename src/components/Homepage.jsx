@@ -1,45 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "flowbite-react";
 import { EyeIcon } from "@heroicons/react/24/outline";
+import { useCoinContext } from "./ContextProvide";
 import { Link } from "react-router-dom";
-import { useCountryContext } from "./ContextProvide";
 
 function HomePage() {
-  const [countries, setCountries] = useState([]);
-  const { selectedCountries, toggleCountry } = useCountryContext();
+  const [coins, setCoins] = useState([]);
+  const { selectedCoins, toggleCoin } = useCoinContext();
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
   useEffect(() => {
-    const fetchCountries = async () => {
+    const fetchCoins = async () => {
       try {
-        const response = await fetch("https://restcountries.com/v3.1/all");
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&order=gecko_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h"
+        );
         const data = await response.json();
-        setCountries(data);
+        setCoins(data);
       } catch (error) {
-        console.error("Error fetching countries:", error);
+        console.error("Error fetching coins:", error);
       }
     };
 
-    fetchCountries();
+    fetchCoins();
   }, []);
 
-  const filteredCountries = countries.filter((country) =>
+  const filteredCoins = coins.filter((coin) =>
     search.toLowerCase() === ""
       ? true
-      : country.name.common.toLowerCase().includes(search.toLowerCase())
+      : coin.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  // Pagination logic
-  const indexOfLastCountry = currentPage * itemsPerPage;
-  const indexOfFirstCountry = indexOfLastCountry - itemsPerPage;
-  const currentCountries = filteredCountries.slice(
-    indexOfFirstCountry,
-    indexOfLastCountry
-  );
+  const indexOfLastCoin = currentPage * itemsPerPage;
+  const indexOfFirstCoin = indexOfLastCoin - itemsPerPage;
+  const currentCoins = filteredCoins.slice(indexOfFirstCoin, indexOfLastCoin);
 
-  const totalPages = Math.ceil(filteredCountries.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredCoins.length / itemsPerPage);
 
   return (
     <div className="p-4">
@@ -47,57 +45,60 @@ function HomePage() {
         <input
           onChange={(e) => setSearch(e.target.value)}
           type="text"
-          placeholder="Search for a country..."
+          placeholder="Search for a coin..."
           className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
       </div>
       <div className="overflow-x-auto">
         <Table className="min-w-full">
           <Table.Head>
-            <Table.HeadCell>Flag</Table.HeadCell>
-            <Table.HeadCell>Country Name</Table.HeadCell>
-            <Table.HeadCell>Region</Table.HeadCell>
-            <Table.HeadCell>Subregion</Table.HeadCell>
-            <Table.HeadCell>Population</Table.HeadCell>
-            <Table.HeadCell>Area</Table.HeadCell>
-            <Table.HeadCell>Information</Table.HeadCell>
+            <Table.HeadCell>Coin</Table.HeadCell>
+            <Table.HeadCell>Current Price</Table.HeadCell>
+            <Table.HeadCell>24h Change</Table.HeadCell>
+            <Table.HeadCell>Actions</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {currentCountries.map((country) => (
+            {currentCoins.map((coin) => (
               <Table.Row
-                key={country.cca3}
+                key={coin.id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
                 <Table.Cell>
-                  <img
-                    src={country.flags.png}
-                    alt={`Flag of ${country.name.common}`}
-                    className="h-6 w-8"
-                  />
+                    <Link to={`/about/${coin.id}`}>
+                  <div className="flex items-center space-x-2">
+                      <img
+                        src={coin.image}
+                        alt={`Logo of ${coin.name}`}
+                        className="h-6 w-6"
+                      />
+                      <span className="font-medium text-gray-900 dark:text-white">
+                        {coin.name}
+                      </span>
+                  </div>
+                    </Link>
                 </Table.Cell>
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {country.name.common}
-                </Table.Cell>
-                <Table.Cell>{country.region}</Table.Cell>
-                <Table.Cell>{country.subregion}</Table.Cell>
-                <Table.Cell>{country.population.toLocaleString()}</Table.Cell>
-                <Table.Cell>{country.area.toLocaleString()} km²</Table.Cell>
+                <Table.Cell>${coin.current_price.toLocaleString()}</Table.Cell>
                 <Table.Cell>
-                  <EyeIcon
-                    className={`h-5 w-5 mr-2 cursor-pointer ${
-                      selectedCountries.includes(country)
+                  <span
+                    className={`${
+                      coin.price_change_percentage_24h > 0
                         ? "text-green-500"
                         : "text-red-500"
                     }`}
-                    aria-hidden="true"
-                    onClick={() => toggleCountry(country)}
-                  />
-                  <Link
-                    to={`/about/${country.cca3}`}
-                    className="flex items-center font-medium text-cyan-600 hover:underline dark:text-cyan-500"
                   >
-                    Information
-                  </Link>
+                    {coin.price_change_percentage_24h.toFixed(2)}%
+                  </span>
+                </Table.Cell>
+                <Table.Cell>
+                  <EyeIcon
+                    className={`h-5 w-5 cursor-pointer ${
+                      selectedCoins.some((c) => c.id === coin.id)
+                        ? "text-green-500"
+                        : "text-black-500"
+                    }`}
+                    aria-hidden="true"
+                    onClick={() => toggleCoin(coin)}
+                  />
                 </Table.Cell>
               </Table.Row>
             ))}
@@ -110,26 +111,22 @@ function HomePage() {
           disabled={currentPage === 1}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-300"
         >
-          Previous
+          &lt;
         </button>
         <div className="flex items-center space-x-2">
-          <button
-            onClick={() => setCurrentPage(1)}
-            disabled={currentPage === 1}
-            className="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-300"
-          >
-            First
-          </button>
-          <span className="text-gray-700">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => setCurrentPage(totalPages)}
-            disabled={currentPage === totalPages}
-            className="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-300"
-          >
-            Last
-          </button>
+          {Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i + 1}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`px-3 py-1 rounded-md ${
+                currentPage === i + 1
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800"
+              } hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            >
+              {i + 1}
+            </button>
+          ))}
         </div>
         <button
           onClick={() =>
@@ -138,7 +135,7 @@ function HomePage() {
           disabled={currentPage === totalPages}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-300"
         >
-          Next
+          &gt;
         </button>
       </div>
     </div>
