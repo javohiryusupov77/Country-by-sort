@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import LineChart from "./chart"; 
+import Line from "./chart";
+import  Button  from "./button";
 
 function AboutPage() {
   const { coinId } = useParams();
@@ -40,24 +41,29 @@ function AboutPage() {
 
   return (
     <div className="container mx-auto p-6 grid grid-cols-5">
-      <div className=" col-span-2 bg-white shadow-md rounded-lg p-6 ">
+      <div className="col-span-2 bg-black border-r text-white shadow-md m-4 p-6">
         <img
-          src={coin.image.large}
-          alt={`${coin.name} logo`}
+          src={coin?.image?.large}
+          alt={`${coin?.name} logo`}
           className="w-32 h-32 object-cover rounded"
         />
         <div>
-          <h1 className="text-3xl font-bold mb-2">{coin.name}</h1>
-          <p className="text-lg text-gray-700">
-            {coin.description.en.split(".")[0]}
+          <h1 className="text-3xl font-bold mb-2">{coin?.name}</h1>
+          <p className="text-lg text-gray-500">
+            {coin?.description?.en?.split(".")[0]}
           </p>
-          <h1 className="text-xl">Rank: {coin.market_cap_rank}</h1>
-          <h2 className="text-xl">Current Price: {coin.current_price}</h2>
-          <h3 className="text-xl">Market Cap: {coin.market_cap}</h3>
+          <h1 className="text-xl">Rank: {coin?.market_cap_rank}</h1>
+          <h2 className="text-xl">
+            Current Price: {coin?.market_data?.current_price?.usd}
+          </h2>
+          <h3 className="text-xl">
+            Market Cap: {coin?.market_data?.market_cap?.usd}
+          </h3>
         </div>
       </div>
-      <div className="mt-6 col-span-3 ">
-        <LineChart />
+      <div className="mt-6 col-span-3">
+        <Line />
+        <Button/>
       </div>
     </div>
   );
