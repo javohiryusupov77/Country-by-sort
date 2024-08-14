@@ -9,7 +9,7 @@ import Carusel from "./Carusel";
 function HomePage() {
   const [coins, setCoins] = useState([]);
   const { selectedCoins, toggleCoin } = useCoinContext();
-  const { currency } = useCurrencyContext();
+  const { currency } = useCurrencyContext(); 
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -70,10 +70,14 @@ function HomePage() {
       <div className="overflow-x-auto">
         <Table className="min-w-full bg-black text-white">
           <Table.Head>
-            <Table.HeadCell>Coin</Table.HeadCell>
-            <Table.HeadCell>Current Price</Table.HeadCell>
-            <Table.HeadCell>Price Change (24h)</Table.HeadCell>
-            <Table.HeadCell>Market Cap</Table.HeadCell>
+            <Table.HeadCell className="bg-[#87CEEB]">Coin</Table.HeadCell>
+            <Table.HeadCell className="bg-[#87CEEB]">
+              Current Price
+            </Table.HeadCell>
+            <Table.HeadCell className="bg-[#87CEEB]">
+              Price Change (24h)
+            </Table.HeadCell>
+            <Table.HeadCell className="bg-[#87CEEB]">Market Cap</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y divide-gray-700">
             {currentCoins.map((coin) => (

@@ -20,7 +20,7 @@ const Carusel = () => {
   return (
     <div className="bg-slate-400 relative h-56 sm:h-64 xl:h-80 2xl:h-96 border border-black overflow-hidden rounded-lg shadow-lg">
       <Carousel
-        slide={false}
+        slideInterval={3000}
         indicators={false}
         controls={true}
         className="carousel-container"
@@ -35,7 +35,7 @@ const Carusel = () => {
             }}
             className="w-full h-full flex flex-col items-center justify-center space-y-4 p-4"
           >
-            <div className="flex space-x-10">
+            <div className="flex space-x-20">
               {chunk.map((coin, coinIndex) => (
                 <div key={coinIndex} className="flex flex-col items-center">
                   <img
