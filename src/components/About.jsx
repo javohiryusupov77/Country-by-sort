@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Chart from "./chart"; 
+import LineChart from "./chart"; 
 
 function AboutPage() {
   const { coinId } = useParams();
@@ -39,8 +39,8 @@ function AboutPage() {
     return <div className="text-center py-10 text-red-500">No data found</div>;
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="bg-white shadow-md rounded-lg p-6 flex items-center space-x-6">
+    <div className="container mx-auto p-6 grid grid-cols-5">
+      <div className=" col-span-2 bg-white shadow-md rounded-lg p-6 ">
         <img
           src={coin.image.large}
           alt={`${coin.name} logo`}
@@ -51,10 +51,13 @@ function AboutPage() {
           <p className="text-lg text-gray-700">
             {coin.description.en.split(".")[0]}
           </p>
+          <h1 className="text-xl">Rank: {coin.market_cap_rank}</h1>
+          <h2 className="text-xl">Current Price: {coin.current_price}</h2>
+          <h3 className="text-xl">Market Cap: {coin.market_cap}</h3>
         </div>
       </div>
-      <div className="mt-6">
-        <Chart />
+      <div className="mt-6 col-span-3 ">
+        <LineChart />
       </div>
     </div>
   );

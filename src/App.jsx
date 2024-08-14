@@ -11,7 +11,7 @@ function App() {
         <Header />
         <br />
         <div>
-          <Carusel />
+          {/* <Carusel /> */}
         </div>
         <Routes>
           <Route path="/" element={<HomePage />} />

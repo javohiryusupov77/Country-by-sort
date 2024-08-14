@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -9,8 +11,9 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js";
-import LineChart from "./Linechart";
+import { Data, Options } from "./data";
 
 ChartJS.register(
   CategoryScale,
@@ -19,14 +22,12 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
-  function Chart() {
-  return (
-    <div className="App">
-      <LineChart />
-    </div>
-  );
-}
-export default Chart
+const LineChart = () => {
+  return <LineChart data={Data} options={Options} />;
+};
+
+export default LineChart;

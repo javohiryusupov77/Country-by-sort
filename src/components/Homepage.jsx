@@ -4,11 +4,12 @@ import { EyeIcon } from "@heroicons/react/24/outline";
 import { useCoinContext } from "./ContextProvide";
 import { useCurrencyContext } from "./CurrencyContext";
 import { Link } from "react-router-dom";
+import Carusel from "./Carusel";
 
 function HomePage() {
   const [coins, setCoins] = useState([]);
   const { selectedCoins, toggleCoin } = useCoinContext();
-  const { currency } = useCurrencyContext(); // Get selected currency
+  const { currency } = useCurrencyContext();
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -53,27 +54,32 @@ function HomePage() {
 
   return (
     <div className="p-4">
+      <Carusel />
+      <h1 className="text-5xl text-white text-center">
+        Cryptocurrency Prices by Market Cap
+      </h1>
+      <br />
       <div className="mb-4">
         <input
           onChange={(e) => setSearch(e.target.value)}
           type="text"
-          placeholder="Search for a coin..."
-          className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          placeholder="Search For a Crypto Currency.."
+          className="w-full bg-black text-white px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
       </div>
       <div className="overflow-x-auto">
-        <Table className="min-w-full">
+        <Table className="min-w-full bg-black text-white">
           <Table.Head>
             <Table.HeadCell>Coin</Table.HeadCell>
             <Table.HeadCell>Current Price</Table.HeadCell>
             <Table.HeadCell>Price Change (24h)</Table.HeadCell>
             <Table.HeadCell>Market Cap</Table.HeadCell>
           </Table.Head>
-          <Table.Body className="divide-y">
+          <Table.Body className="divide-y divide-gray-700">
             {currentCoins.map((coin) => (
               <Table.Row
                 key={coin.id}
-                className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                className="bg-gray-900 hover:bg-gray-800"
               >
                 <Table.Cell>
                   <Link
@@ -85,9 +91,7 @@ function HomePage() {
                       alt={`Logo of ${coin.name}`}
                       className="h-6 w-6"
                     />
-                    <span className="font-medium text-gray-900 dark:text-white">
-                      {coin.name}
-                    </span>
+                    <span className="font-medium">{coin.name}</span>
                   </Link>
                 </Table.Cell>
                 <Table.Cell>
@@ -144,7 +148,7 @@ function HomePage() {
             <>
               <button
                 onClick={() => setCurrentPage(1)}
-                className="px-3 py-1 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1 rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 1
               </button>
@@ -158,7 +162,7 @@ function HomePage() {
               className={`px-3 py-1 rounded-md ${
                 currentPage === page
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-800"
+                  : "bg-gray-700 text-gray-300"
               } hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500`}
             >
               {page}
@@ -169,7 +173,7 @@ function HomePage() {
               {endPage < totalPages - 1 && <span>...</span>}
               <button
                 onClick={() => setCurrentPage(totalPages)}
-                className="px-3 py-1 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1 rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {totalPages}
               </button>
