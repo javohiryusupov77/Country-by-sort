@@ -1,9 +1,21 @@
 import React from "react";
 import { Carousel } from "flowbite-react";
-import { useFlagsContext } from "./FlagsContext";
+import { useCoinContext } from "./ContextProvide";
+import { useCurrencyContext } from "./CurrencyContext";
+
+const chunkArray = (array, size) => {
+  const result = [];
+  for (let i = 0; i < array.length; i += size) {
+    result.push(array.slice(i, i + size));
+  }
+  return result;
+};
 
 const Carusel = () => {
-  const flags = useFlagsContext();
+  const { selectedCoins } = useCoinContext();
+  const { currency } = useCurrencyContext();
+
+  const coinChunks = chunkArray(selectedCoins, 4);
 
   return (
     <div className="bg-slate-400 relative h-56 sm:h-64 xl:h-80 2xl:h-96 border border-black overflow-hidden rounded-lg shadow-lg">
@@ -13,21 +25,48 @@ const Carusel = () => {
         controls={true}
         className="carousel-container"
       >
-        {flags.map((flag, index) => (
+        {coinChunks.map((chunk, chunkIndex) => (
           <div
-            key={index}
-            className="flex justify-center items-center w-full h-full"
+            key={chunkIndex}
             style={{
               backgroundImage: `url('/bg.jpeg')`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
+            className="w-full h-full flex flex-col items-center justify-center space-y-4 p-4"
           >
-            <img
-              className="object-cover rounded-lg"
-              src={flag}
-              alt={`Flag ${index}`}
-            />
+            <div className="flex space-x-10">
+              {chunk.map((coin, coinIndex) => (
+                <div key={coinIndex} className="flex flex-col items-center">
+                  <img
+                    className="object-cover rounded-lg w-24 h-24"
+                    src={coin.image}
+                    alt={`Coin ${chunkIndex * 4 + coinIndex}`}
+                  />
+                  <div className="flex gap-4">
+                    <p className="text-white">{coin.symbol.toUpperCase()}</p>
+                    <span
+                      className={`${
+                        coin.price_change_percentage_24h > 0
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {coin.price_change_percentage_24h?.toFixed(2)}%
+                    </span>
+                  </div>
+                  <p className="text-white">
+                    {currency === "USD"
+                      ? `$${coin.current_price.toLocaleString()}`
+                      : currency === "TRY"
+                      ? `₺${coin.current_price.toLocaleString()}`
+                      : currency === "ETH"
+                      ? `Ξ${coin.current_price.toLocaleString()}`
+                      : `$${coin.current_price.toLocaleString()}`}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </Carousel>

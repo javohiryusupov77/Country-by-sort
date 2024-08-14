@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Table } from "flowbite-react";
 import { EyeIcon } from "@heroicons/react/24/outline";
 import { useCoinContext } from "./ContextProvide";
+import { useCurrencyContext } from "./CurrencyContext";
 import { Link } from "react-router-dom";
 
 function HomePage() {
   const [coins, setCoins] = useState([]);
   const { selectedCoins, toggleCoin } = useCoinContext();
+  const { currency } = useCurrencyContext(); // Get selected currency
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -16,17 +18,18 @@ function HomePage() {
     const fetchCoins = async () => {
       try {
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/coins/markets?vs_currency=USD&order=gecko_desc&per_page=249&page=1&sparkline=false&price_change_percentage=24h"
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.toLowerCase()}&order=gecko_desc&per_page=249&page=1&sparkline=false&price_change_percentage=24h`
         );
         const data = await response.json();
         setCoins(data);
+        console.log("Coins fetched:", data);
       } catch (error) {
         console.error("Error fetching coins:", error);
       }
     };
 
     fetchCoins();
-  }, []);
+  }, [currency]); // Fetch coins when currency changes
 
   const filteredCoins = coins.filter((coin) =>
     search.toLowerCase() === ""
@@ -50,12 +53,12 @@ function HomePage() {
 
   return (
     <div className="p-4">
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4">
         <input
           onChange={(e) => setSearch(e.target.value)}
           type="text"
           placeholder="Search for a coin..."
-          className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
+          className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
       </div>
       <div className="overflow-x-auto">
@@ -63,8 +66,8 @@ function HomePage() {
           <Table.Head>
             <Table.HeadCell>Coin</Table.HeadCell>
             <Table.HeadCell>Current Price</Table.HeadCell>
-            <Table.HeadCell>24h Change</Table.HeadCell>
-            <Table.HeadCell>Actions</Table.HeadCell>
+            <Table.HeadCell>Price Change (24h)</Table.HeadCell>
+            <Table.HeadCell>Market Cap</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {currentCoins.map((coin) => (
@@ -73,45 +76,55 @@ function HomePage() {
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
               >
                 <Table.Cell>
-                  <Link to={`/about/${coin.id}`}>
-                    <div className="flex items-center space-x-2">
-                      <img
-                        src={coin.image}
-                        alt={`Logo of ${coin.name}`}
-                        className="h-6 w-6"
-                      />
-                      <span className="font-medium text-gray-900 dark:text-white">
-                        {coin.name}
-                      </span>
-                    </div>
+                  <Link
+                    to={`/about/${coin.id}`}
+                    className="flex items-center space-x-2"
+                  >
+                    <img
+                      src={coin.image}
+                      alt={`Logo of ${coin.name}`}
+                      className="h-6 w-6"
+                    />
+                    <span className="font-medium text-gray-900 dark:text-white">
+                      {coin.name}
+                    </span>
                   </Link>
                 </Table.Cell>
-                <Table.Cell>${coin.current_price.toLocaleString()}</Table.Cell>
                 <Table.Cell>
-                  <span
-                    className={`${
-                      coin.price_change_percentage_24h > 0
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {coin.price_change_percentage_24h !== null &&
-                    coin.price_change_percentage_24h !== undefined
-                      ? coin.price_change_percentage_24h.toFixed(2)
-                      : "N/A"}
-                    %
-                  </span>
+                  {currency === "USD"
+                    ? `$${coin.current_price.toLocaleString()}`
+                    : `${coin.current_price.toLocaleString()} ${currency}`}
                 </Table.Cell>
                 <Table.Cell>
-                  <EyeIcon
-                    className={`h-5 w-5 cursor-pointer ${
-                      selectedCoins.some((c) => c.id === coin.id)
-                        ? "text-green-500"
-                        : "text-black-500"
-                    }`}
-                    aria-hidden="true"
-                    onClick={() => toggleCoin(coin)}
-                  />
+                  <div className="flex items-center space-x-2">
+                    <EyeIcon
+                      className={`h-5 w-5 cursor-pointer ${
+                        selectedCoins.some((c) => c.id === coin.id)
+                          ? "text-green-500"
+                          : "text-gray-500"
+                      }`}
+                      aria-hidden="true"
+                      onClick={() => toggleCoin(coin)}
+                    />
+                    <span
+                      className={`${
+                        coin.price_change_percentage_24h > 0
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {coin.price_change_percentage_24h !== null &&
+                      coin.price_change_percentage_24h !== undefined
+                        ? coin.price_change_percentage_24h.toFixed(2)
+                        : "N/A"}
+                      %
+                    </span>
+                  </div>
+                </Table.Cell>
+                <Table.Cell>
+                  {currency === "USD"
+                    ? `$${coin.market_cap.toLocaleString()}`
+                    : `${coin.market_cap.toLocaleString()} ${currency}`}
                 </Table.Cell>
               </Table.Row>
             ))}
