@@ -18,7 +18,15 @@ const Carusel = () => {
   const coinChunks = chunkArray(selectedCoins, 4);
 
   return (
-    <div className="bg-slate-400 relative h-56 sm:h-64 xl:h-80 2xl:h-96 border border-black overflow-hidden rounded-lg shadow-lg">
+    <div
+      style={{
+        backgroundImage: `url('/bg.jpeg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className="bg-slate-400 relative h-56 sm:h-64 xl:h-80 2xl:h-96 border border-black overflow-hidden rounded-lg shadow-lg"
+    >
+      <h1 className="text-5xl text-[#87CEEB] text-center">CRYPTOFOLIO WATCH LIST</h1>
       <Carousel
         slideInterval={3000}
         indicators={false}

@@ -9,7 +9,7 @@ import Carusel from "./Carusel";
 function HomePage() {
   const [coins, setCoins] = useState([]);
   const { selectedCoins, toggleCoin } = useCoinContext();
-  const { currency } = useCurrencyContext(); 
+  const { currency } = useCurrencyContext();
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
@@ -19,7 +19,7 @@ function HomePage() {
     const fetchCoins = async () => {
       try {
         const response = await fetch(
-          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.toLowerCase()}&order=gecko_desc&per_page=249&page=1&sparkline=false&price_change_percentage=24h`
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.toUpperCase()}&order=gecko_desc&per_page=249&page=1&sparkline=false&price_change_percentage=24h`
         );
         const data = await response.json();
         setCoins(data);
@@ -30,7 +30,7 @@ function HomePage() {
     };
 
     fetchCoins();
-  }, [currency]); // Fetch coins when currency changes
+  }, [currency]);
 
   const filteredCoins = coins.filter((coin) =>
     search.toLowerCase() === ""
