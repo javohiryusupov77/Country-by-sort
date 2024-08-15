@@ -156,7 +156,7 @@ function HomePage() {
               >
                 1
               </button>
-              {startPage > 2 && <span>...</span>}
+              {startPage > 2 && <span className="text-white">...</span>}
             </>
           )}
           {pages.map((page) => (
@@ -174,7 +174,7 @@ function HomePage() {
           ))}
           {endPage < totalPages && (
             <>
-              {endPage < totalPages - 1 && <span>...</span>}
+              {endPage < totalPages - 1 && <span className="text-white">...</span>}
               <button
                 onClick={() => setCurrentPage(totalPages)}
                 className="px-3 py-1 rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
