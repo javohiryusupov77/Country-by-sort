@@ -1,20 +1,56 @@
 import React, { useState } from "react";
 import { Button, Drawer } from "flowbite-react";
 import { useCoinContext } from "./ContextProvide";
+import Swal from "sweetalert2";
 
 function RightDrawer() {
   const [isOpen, setIsOpen] = useState(true);
   const { selectedCoins, setSelectedCoins } = useCoinContext();
   const handleClose = () => setIsOpen(false);
+
   function HangleRemove(coinId) {
     const updatedCoins = selectedCoins.filter((coin) => coin.id !== coinId);
     setSelectedCoins(updatedCoins);
     localStorage.setItem("selectedCoins", JSON.stringify(updatedCoins));
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   }
 
   function deleteItem() {
     setSelectedCoins([]);
     localStorage.removeItem("selectedCoins");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   }
 
   return (
@@ -30,10 +66,7 @@ function RightDrawer() {
         onClose={handleClose}
         position="right"
       >
-        <Drawer.Header
-          title="WatchList"
-          className="bg-gray-400 text-white"
-        />
+        <Drawer.Header title="WatchList" className="bg-gray-400 text-white" />
         <Drawer.Items>
           <div className="p-4">
             {selectedCoins.length === 0 ? (
@@ -52,10 +85,10 @@ function RightDrawer() {
                     />
                     <span>${coin.current_price}</span>
                     <button
-                    onClick={()=> HangleRemove(coin.id)}
+                      onClick={() => HangleRemove(coin.id)}
                       className="bg-red-600 px-2 text-white"
                     >
-                      remove
+                      Remove
                     </button>
                   </div>
                 ))}
@@ -65,7 +98,12 @@ function RightDrawer() {
           <div className="flex justify-center mt-4">
             <button
               onClick={deleteItem}
-              className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className={`bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
+                selectedCoins.length === 0
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={selectedCoins.length === 0}
             >
               Clear All
             </button>

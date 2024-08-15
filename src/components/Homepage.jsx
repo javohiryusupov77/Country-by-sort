@@ -13,23 +13,33 @@ function HomePage() {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [visiblePages, setVisiblePages] = useState(5);
+  const [visiblePages] = useState(5);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchCoins = async () => {
+      setLoading(true);
       try {
-        const response = await fetch(
-          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.toUpperCase()}&order=gecko_desc&per_page=249&page=1&sparkline=false&price_change_percentage=24h`
-        );
-        const data = await response.json();
-        setCoins(data);
-        console.log("Coins fetched:", data);
+        const storedCoins = localStorage.getItem(`coins_${currency}`);
+        if (storedCoins) {
+          setCoins(JSON.parse(storedCoins));
+          console.log("Coins loaded from localStorage");
+        } else {
+          const response = await fetch(
+            `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency.toUpperCase()}&order=gecko_desc&per_page=249&page=1&sparkline=false&price_change_percentage=24h`
+          );
+          const data = await response.json();
+          setCoins(data);
+          localStorage.setItem(`coins_${currency}`, JSON.stringify(data));
+          console.log("Coins fetched from API and stored in localStorage");
+        }
       } catch (error) {
         console.error("Error fetching coins:", error);
+      } finally {
+        setLoading(false);
       }
     };
-
-    fetchCoins();
+      fetchCoins();
   }, [currency]);
 
   const filteredCoins = coins.filter((coin) =>
@@ -55,6 +65,7 @@ function HomePage() {
   return (
     <div className="p-4">
       <Carusel />
+      <br />
       <h1 className="text-5xl text-white text-center">
         Cryptocurrency Prices by Market Cap
       </h1>
@@ -67,6 +78,7 @@ function HomePage() {
           className="w-full bg-black text-white px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500"
         />
       </div>
+      {loading && <p>Loading...</p>}
       <div className="overflow-x-auto">
         <Table className="min-w-full bg-black text-white">
           <Table.Head>
@@ -174,7 +186,9 @@ function HomePage() {
           ))}
           {endPage < totalPages && (
             <>
-              {endPage < totalPages - 1 && <span className="text-white">...</span>}
+              {endPage < totalPages - 1 && (
+                <span className="text-white">...</span>
+              )}
               <button
                 onClick={() => setCurrentPage(totalPages)}
                 className="px-3 py-1 rounded-md bg-gray-700 text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -199,3 +213,4 @@ function HomePage() {
 }
 
 export default HomePage;
+

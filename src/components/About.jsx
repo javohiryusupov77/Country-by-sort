@@ -16,7 +16,6 @@ function AboutPage() {
         const response = await fetch(
           `https://api.coingecko.com/api/v3/coins/${coinId}`
         );
-
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -33,7 +32,7 @@ function AboutPage() {
     fetchCoin();
   }, [coinId]);
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
+  if (loading) return <div className="text-center text-red py-10">Loading...</div>;
   if (error)
     return <div className="text-center py-10 text-red-500">Error: {error}</div>;
   if (!coin)
