@@ -66,7 +66,7 @@ function RightDrawer() {
         onClose={handleClose}
         position="right"
       >
-        <Drawer.Header title="WatchList" className="bg-gray-500 text-white" />
+        <Drawer.Header title={<span style={{color:"white"}}>WatchList</span>} className="bg-gray-500" />
         <Drawer.Items>
           <div className="p-4">
             {selectedCoins.length === 0 ? (
