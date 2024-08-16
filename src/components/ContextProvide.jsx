@@ -42,7 +42,7 @@ export const CoinProvider = ({ children }) => {
         toast: true,
         position: "top-end",
         showConfirmButton: false,
-        timer: 1000,
+        timer: 3000,
         timerProgressBar: true,
         didOpen: (toast) => {
           toast.onmouseenter = Swal.stopTimer;
