@@ -61,16 +61,16 @@ function RightDrawer() {
         </Button>
       </div>
       <Drawer
-        className="bg-gray-400"
+        className="bg-gray-500 text-white"
         open={isOpen}
         onClose={handleClose}
         position="right"
       >
-        <Drawer.Header title="WatchList" className="bg-gray-400 text-white" />
+        <Drawer.Header title="WatchList" className="bg-gray-500 text-white" />
         <Drawer.Items>
           <div className="p-4">
             {selectedCoins.length === 0 ? (
-              <p className="text-center text-gray-500">No coins selected</p>
+              <p className="text-center text-white">No coins selected</p>
             ) : (
               <div className="grid grid-cols-2 gap-4">
                 {selectedCoins.map((coin) => (
@@ -99,9 +99,7 @@ function RightDrawer() {
             <button
               onClick={deleteItem}
               className={`bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-                selectedCoins.length === 0
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
+                selectedCoins.length === 0 ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={selectedCoins.length === 0}
             >
