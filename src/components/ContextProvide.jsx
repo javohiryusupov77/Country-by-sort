@@ -30,7 +30,7 @@ export const CoinProvider = ({ children }) => {
         },
       });
       Toast.fire({
-        icon: "error",
+        icon: "success",
         title: "deleted successfully",
       });
       
