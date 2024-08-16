@@ -9,8 +9,7 @@ function App() {
       <div>
         <Header />
         <br />
-        <div>
-        </div>
+        <div></div>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/about/:coinId" element={<AboutPage />} />
@@ -20,8 +19,6 @@ function App() {
     </Router>
   );
 }
-
- 
 
 function ContactPage() {
   return <h2>Contact Page</h2>;

@@ -65,7 +65,7 @@ const styleChange = {
       </h1>
       <Carousel
         theme={styleChange}
-        slideInterval={2000}
+        slideInterval={200}
         indicators={false}
         controls={true}
         className="carousel-container"

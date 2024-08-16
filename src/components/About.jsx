@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Line from "./chart";
-import  Button  from "./button";
+import Button from "./button";
 
 function AboutPage() {
   const { coinId } = useParams();
@@ -32,13 +32,18 @@ function AboutPage() {
     fetchCoin();
   }, [coinId]);
 
-  if (loading) return <div className="text-center text-red py-10">Loading...</div>;
-  if (error)
-    return <div className="text-center py-10 text-red-500">Error: {error}</div>;
-  if (!coin)
-    return <div className="text-center py-10 text-red-500">No data found</div>;
-
-  return (
+  return loading ? (
+    <div className="flex justify-center items-center">
+      <div className="flex items-center space-x-2">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-red-500"></div>
+        <span className="animate-pulse text-red-500 text-xl">Loading...</span>
+      </div>
+    </div>
+  ) : error ? (
+    <div className="text-center py-10 text-red-500">Error: {error}</div>
+  ) : !coin ? (
+    <div className="text-center py-10 text-red-500">No data found</div>
+  ) : (
     <div className="container mx-auto p-6 grid grid-cols-5">
       <div className="col-span-2 bg-black border-r text-white shadow-md m-4 p-6">
         <img
@@ -62,7 +67,7 @@ function AboutPage() {
       </div>
       <div className="mt-6 col-span-3">
         <Line />
-        <Button/>
+        <Button />
       </div>
     </div>
   );
