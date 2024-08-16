@@ -2,6 +2,7 @@ import React from "react";
 import { Carousel } from "flowbite-react";
 import { useCoinContext } from "./ContextProvide";
 import { useCurrencyContext } from "./CurrencyContext";
+import { TypeAnimation } from "react-type-animation";
 
 const chunkArray = (array, size) => {
   const result = [];
@@ -58,14 +59,23 @@ const styleChange = {
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
-      className=" relative h-56 sm:h-64 xl:h-80 2xl:h-96 border border-black overflow-hidden rounded-lg shadow-lg"
+      className="relative h-56 sm:h-64 xl:h-80 2xl:h-96 border border-black overflow-hidden rounded-lg shadow-lg"
     >
-      <h1 className="text-5xl text-[#87CEEB] text-center">
-        CRYPTOFOLIO WATCH LIST
-      </h1>
+      <div>
+        <TypeAnimation
+          className="ml-72 text-center text-3xl md:text-5xl"
+          sequence={["CRYPTOFOLIO WATCH LIST", 2000]}
+          wrapper="span"
+          speed={50}
+          style={{
+            color: "#87CEEB",
+          }}
+          repeat={Infinity}
+        />
+      </div>
       <Carousel
         theme={styleChange}
-        slideInterval={200}
+        slideInterval={2000}
         indicators={false}
         controls={true}
         className="carousel-container"
